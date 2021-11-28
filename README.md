@@ -14,7 +14,7 @@ python game.py -d Normal
 you can replace the `-d` tag (difficulty) with which difficulty you would like to play against. Available difficulties are "Normal", "Hard", and "Impossible". Each difficulty is trained by setting a fitness threshold of 147, 233, and 370, respectively.
 
 ## Training your own Dinosaur 🦖
-To train a dinosaur, first edit the *fitness_threshold* `config.txt` inside `src` to whatever you fitness threshold you want to train to. Note that you will have to wait until this threshold is met and the program closes itself before being able to save this dinosaur to be used later. On closing, the program will save the dinosaur to the `models` folder called dino_f{fitness_score}.pkl
+To train a dinosaur, first edit the *fitness_threshold* inside `config.txt` in the `src` folder to whatever fitness threshold you want to train to. Note that you will have to wait until this threshold is met and the program closes itself before being able to save this dinosaur to be used later. On closing, the program will save the dinosaur to the `models` folder called dino_f{fitness_score}.pkl
 
 After setting your fitness_threshold, run
 
