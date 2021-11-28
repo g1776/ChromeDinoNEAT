@@ -5,13 +5,23 @@ import random
 import threading
 import numpy as np
 import math
+from numpy.lib.function_base import diff
 import pygame
 from neat.math_util import softmax
+import argparse
 
 from classes.dino import *
 from classes.obstacle import *
 from classes.scene import *
 
+
+# read in command line arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("-d", "--difficulty", default = "Normal", help="AI Difficulty (Normal, Hard, or Impossible)")
+args = parser.parse_args()
+difficulty = args.difficulty
+if difficulty not in list(DinsosaurBot.difficulties.keys()):
+    raise ValueError("AI Difficulty must be either " + repr(list(DinsosaurBot.difficulties.keys())))
 
 
 pygame.init()
@@ -75,7 +85,7 @@ def main():
     run = True
     clock = pygame.time.Clock()
     human = Dinosaur()
-    bot = DinsosaurBot("Impossible")
+    bot = DinsosaurBot(difficulty)
     
     cloud = Cloud()
     game_speed = 20
@@ -238,9 +248,9 @@ def menu(death_count):
 
         # score text
         if death_count == 0:
-            text = font.render("Press any Key to Start", True, FONT_COLOR)
+            text = font.render(f"Press any Key to Start (AI: {difficulty})", True, FONT_COLOR)
         elif death_count > 0:
-            text = font.render("Press any Key to Restart", True, FONT_COLOR)
+            text = font.render(f"Press any Key to Restart (AI: {difficulty})", True, FONT_COLOR)
             score = font.render("Your Score: " + str(points), True, FONT_COLOR)
             scoreRect = score.get_rect()
             scoreRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
@@ -265,32 +275,6 @@ def menu(death_count):
         SCREEN.blit(text, textRect)
         
         SCREEN.blit(Dinosaur.RUNNING[0], (SCREEN_WIDTH // 2 - 20, SCREEN_HEIGHT // 2 - 140))
-
-        # draw difficulty buttons
-        mouse = pygame.mouse.get_pos()
-        btn_color = (170,170,170)
-        btn_color_hover = (100,100,100)
-        btn_width = math.trunc(SCREEN_WIDTH * .4)
-        btn_height = math.trunc(SCREEN_HEIGHT * .1)
-        btns_top = SCREEN_HEIGHT // 2 + 40
-        btns_offset = 20
-        # for idx, diff in enumerate(['Normal', 'Hard', 'Impossible']):
-
-        #     mouseOver = SCREEN_WIDTH/2 <= mouse[0] <= SCREEN_WIDTH/2 + btn_width and \
-        #         btns_top <= mouse[1] <= (btn_height + btns_offset) * idx
-            
-        #     pygame.draw.rect(
-        #         SCREEN, 
-        #         btn_color_hover if mouseOver else btn_color, 
-        #         [SCREEN_WIDTH // 2 - btn_width // 2, 
-        #         btns_top + (btn_height + btns_offset) * idx,
-        #         btn_width, 
-        #         btn_height
-        #         ])
-        #     text = font.render(diff , True , FONT_COLOR)
-        #     textRect = text.get_rect()
-        #     textRect.center = (SCREEN_WIDTH // 2, btns_top + (btn_height + btns_offset) * idx + (btn_height//2))
-        #     SCREEN.blit(text, textRect)
         
         # handle input to start/exit game
         for event in pygame.event.get():
